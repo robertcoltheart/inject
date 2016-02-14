@@ -3,7 +3,7 @@
 namespace Inject
 {
     /// <summary>
-    /// A dependency injection container that stores type registrations and instances, and creates new types;
+    /// A dependency injection container that stores type registrations and instances, and creates new types.
     /// </summary>
     public interface IInjectContainer
     {
