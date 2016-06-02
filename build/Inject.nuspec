@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Inject</id>
+        <version>$version$</version>
+        <title>Inject</title>
+        <authors>Robert Coltheart</authors>
+        <owners>Robert Coltheart</owners>
+        <licenseUrl>https://github.com/robertcoltheart/Inject/raw/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/robertcoltheart/Inject</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A dependency injection container for registering and resolving types.</description>
+        <summary>A dependency injection container for registering and resolving types.</summary>
+        <tags>di dependency injection container</tags>
+    </metadata>
+
+    <files>
+        <file src="Inject/bin/Release/Inject.dll" target="lib/net45" />
+        <file src="Inject/bin/Release/Inject.xml" target="lib/net45" />
+    </files>
+</package>

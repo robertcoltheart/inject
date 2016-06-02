@@ -1,20 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Inject
 {
-    [TestClass]
+    [TestFixture]
     public class ResolutionFailedExceptionTests
     {
-        [TestMethod]
+        [Test]
         public void IsTypeOfException()
         {
             Assert.IsTrue(typeof(Exception).IsAssignableFrom(typeof(ResolutionFailedException)), "Type is not an exception.");
         }
 
-        [TestMethod]
+        [Test]
         public void InnerExceptionSet()
         {
             var innerException = new Exception();
@@ -23,7 +23,7 @@ namespace Inject
             Assert.AreSame(innerException, exception.InnerException);
         }
 
-        [TestMethod]
+        [Test]
         public void HasMessage()
         {
             var exception = new ResolutionFailedException("msg");
@@ -31,13 +31,13 @@ namespace Inject
             Assert.AreEqual("msg", exception.Message);
         }
 
-        [TestMethod]
+        [Test]
         public void IsSerializableDecorated()
         {
             Assert.IsTrue(typeof(ResolutionFailedException).GetCustomAttributes(typeof(SerializableAttribute), true).Length == 1, "Type must be serializable.");
         }
 
-        [TestMethod]
+        [Test]
         public void IsSerializable()
         {
             var exception = new ResolutionFailedException();
@@ -60,6 +60,6 @@ namespace Inject
             }
 
             Assert.IsNotNull(exception, "Type could not be deserialized.");
-        }  
+        }
     }
 }

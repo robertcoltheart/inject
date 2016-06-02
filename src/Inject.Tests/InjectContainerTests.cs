@@ -1,98 +1,101 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Inject
 {
-    [TestClass]
+    [TestFixture]
     public class InjectContainerTests
     {
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void RegisterNullTypeThrows()
         {
-            new InjectContainer().Register(null, typeof(object));
+            var container = new InjectContainer();
+
+            Assert.That(() => container.Register(null, typeof(object)), Throws.ArgumentNullException);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void RegisterTypeWithNullTypeThrows()
         {
-            new InjectContainer().Register(typeof(object), null);
+            var container = new InjectContainer();
+
+            Assert.That(() => container.Register(typeof(object), null), Throws.ArgumentNullException);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void RegisterInstanceNullThrows()
         {
-            new InjectContainer().Register(null, new object());
+            var container = new InjectContainer();
+
+            Assert.That(() => container.Register(null, new object()), Throws.ArgumentNullException);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void RegisterInstanceWithNullInstanceThrows()
         {
-            new InjectContainer().Register<object>(null);
-        }
-        
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void RegisteredTypeDoesntInheritThrows()
-        {
-            new InjectContainer().Register(typeof(IInterface1), typeof(Class2));
+            var container = new InjectContainer();
+
+            Assert.That(() => container.Register<object>(null), Throws.ArgumentNullException);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
+        public void RegisteredTypeDoesntInheritThrows()
+        {
+            var container = new InjectContainer();
+
+            Assert.That(() => container.Register(typeof(IInterface1), typeof(Class2)), Throws.ArgumentException);
+        }
+
+        [Test]
         public void RegisteredInstanceDoesntInheritThrows()
         {
-            new InjectContainer().Register(typeof(IInterface1), new Class2());
+            var container = new InjectContainer();
+
+            Assert.That(() => container.Register(typeof(IInterface1), new Class2()), Throws.ArgumentException);
         }
-        
-        [TestMethod]
+
+        [Test]
         public void RegisterSameTypeThrows()
         {
             var container = new InjectContainer();
             container.Register<IInterface1, Class1>();
 
-            try
-            {
-                container.Register<IInterface1, Class1>();
-                Assert.Fail();
-            }
-            catch (ArgumentException)
-            {
-            }
+            Assert.That(() => container.Register<IInterface1, Class1>(), Throws.ArgumentException);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ResolveNullTypeThrows()
         {
-            new InjectContainer().Resolve(null);
+            var container = new InjectContainer();
+
+            Assert.That(() => container.Resolve(null), Throws.ArgumentNullException);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ResolutionFailedException))]
+        [Test]
         public void ResolveNonConcreteTypeThrows()
         {
-            new InjectContainer().Resolve<IInterface1>();
+            var container = new InjectContainer();
+
+            Assert.That(() => container.Resolve<IInterface1>(), Throws.InstanceOf<ResolutionFailedException>());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ResolutionFailedException))]
+        [Test]
         public void ResolveAbstractTypeThrows()
         {
-            new InjectContainer().Resolve<AbstractClass1>();
+            var container = new InjectContainer();
+
+            Assert.That(() => container.Resolve<AbstractClass1>(), Throws.InstanceOf<ResolutionFailedException>());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ResolutionFailedException))]
+        [Test]
         public void ResolveStaticTypeThrows()
         {
-            new InjectContainer().Resolve(typeof(StaticClass));
+            var container = new InjectContainer();
+
+            Assert.That(() => container.Resolve(typeof(StaticClass)), Throws.InstanceOf<ResolutionFailedException>());
         }
 
-        [TestMethod]
+        [Test]
         public void CanRegisterTypeAsSingleton()
         {
             var container = new InjectContainer();
@@ -104,7 +107,7 @@ namespace Inject
             Assert.AreSame(instance1, instance2);
         }
 
-        [TestMethod]
+        [Test]
         public void ResolvesInstanceAsSingleton()
         {
             var container = new InjectContainer();
@@ -119,48 +122,45 @@ namespace Inject
             Assert.AreSame(instance, instance1);
             Assert.AreSame(instance, instance2);
         }
-        
-        [TestMethod]
+
+        [Test]
         public void CanResolveConcreteClassWithoutRegistering()
         {
             var container = new InjectContainer();
             var instance = container.Resolve<Class1>();
-            
+
             Assert.IsNotNull(instance);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ResolutionFailedException))]
+        [Test]
         public void CannotResolveAbstractClass()
         {
             var container = new InjectContainer();
             container.Register<IInterface1, AbstractClass1>();
 
-            container.Resolve<AbstractClass1>();
+            Assert.That(() => container.Resolve<AbstractClass1>(), Throws.InstanceOf<ResolutionFailedException>());
         }
-        
-        [TestMethod]
-        [ExpectedException(typeof(ResolutionFailedException))]
+
+        [Test]
         public void CannotResolveInterface()
         {
             var container = new InjectContainer();
             container.Register<IInterface1, IInherited1>();
 
-            container.Resolve<IInterface1>();
+            Assert.That(() => container.Resolve<IInterface1>(), Throws.InstanceOf<ResolutionFailedException>());
         }
-        
-        [TestMethod]
-        [ExpectedException(typeof(ResolutionFailedException))]
+
+        [Test]
         public void ResolveCircularReferenceThrows()
         {
             var container = new InjectContainer();
             container.Register<IInterface1, CircularReference1>();
             container.Register<IInterface2, CircularReference2>();
 
-            container.Resolve<IInterface1>();
+            Assert.That(() => container.Resolve<IInterface1>(), Throws.InstanceOf<ResolutionFailedException>());
         }
 
-        [TestMethod]
+        [Test]
         public void ResolvesConstructorParameters()
         {
             var container = new InjectContainer();
@@ -173,7 +173,7 @@ namespace Inject
             Assert.IsNotNull(instance.Arg);
         }
 
-        [TestMethod]
+        [Test]
         public void CanCreatePrivateNestedClass()
         {
             var container = new InjectContainer();
@@ -182,25 +182,23 @@ namespace Inject
             Assert.IsNotNull(instance);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ResolutionFailedException))]
+        [Test]
         public void CreatingMultiplePublicConstructorClassThrows()
         {
             var container = new InjectContainer();
 
-            container.Resolve<MultipleConstructorClass>();
+            Assert.That(() => container.Resolve<MultipleConstructorClass>(), Throws.InstanceOf<ResolutionFailedException>());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ResolutionFailedException))]
+        [Test]
         public void CreatingNoPublicConstructorClassThrows()
         {
             var container = new InjectContainer();
 
-            container.Resolve<NoConstructorClass>();
+            Assert.That(() => container.Resolve<NoConstructorClass>(), Throws.InstanceOf<ResolutionFailedException>());
         }
 
-        [TestMethod]
+        [Test]
         public void CanCreateOnePublicConstructorClassWithMultiPrivateConstructors()
         {
             var container = new InjectContainer();
@@ -209,7 +207,7 @@ namespace Inject
             Assert.IsNotNull(instance);
         }
 
-        [TestMethod]
+        [Test]
         public void CanCreateConcreteArgumentClass()
         {
             var container = new InjectContainer();
@@ -219,7 +217,7 @@ namespace Inject
             Assert.IsNotNull(instance.Arg);
         }
 
-        [TestMethod]
+        [Test]
         public void ExceptionInConstructorThrowsInnerException()
         {
             try
@@ -233,7 +231,7 @@ namespace Inject
                 Assert.AreEqual(typeof(InvalidOperationException), ex.InnerException.GetType());
             }
         }
-        
+
         public interface IInterface1
         {
         }
@@ -258,7 +256,7 @@ namespace Inject
         {
             IInterface2 Arg { get; set; }
         }
-        
+
         public class Class1WithProperty : IInterfaceWithProperty
         {
             public Class1WithProperty(IInterface2 arg)
