@@ -9,8 +9,8 @@
         <licenseUrl>https://github.com/robertcoltheart/Inject/raw/master/LICENSE</licenseUrl>
         <projectUrl>https://github.com/robertcoltheart/Inject</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>A simple dependency injection container for registering and resolving types.</description>
-        <summary>A simple dependency injection container for registering and resolving types.</summary>
+        <description>A dependency injection container for registering and resolving types.</description>
+        <summary>A dependency injection container for registering and resolving types.</summary>
         <tags>di dependency injection container</tags>
     </metadata>
 
