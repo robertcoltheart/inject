@@ -1,5 +1,5 @@
 # Inject [![Travis](https://img.shields.io/travis/robertcoltheart/Inject.svg)](https://travis-ci.org/robertcoltheart/Inject) [![AppVeyor](https://img.shields.io/appveyor/ci/robertcoltheart/Inject.svg)](https://ci.appveyor.com/project/robertcoltheart/Inject) [![NuGet](https://img.shields.io/nuget/v/Inject.svg)](https://www.nuget.org/packages/Inject)
-A simple dependency injection container for registering and resolving types.
+A dependency injection container for registering and resolving types.
 
 ## Usage
 Install the package from NuGet with `nuget install Inject`.
