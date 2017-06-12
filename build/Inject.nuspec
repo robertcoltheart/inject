@@ -15,7 +15,7 @@
     </metadata>
 
     <files>
-        <file src="Inject/bin/Release/Inject.dll" target="lib/net45" />
-        <file src="Inject/bin/Release/Inject.xml" target="lib/net45" />
+        <file src="Inject/bin/Release/netstandard1.0/Inject.dll" target="lib/netstandard1.0" />
+        <file src="Inject/bin/Release/netstandard1.0/Inject.xml" target="lib/netstandard1.0" />
     </files>
 </package>
