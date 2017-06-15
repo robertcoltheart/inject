@@ -4,6 +4,8 @@ os:
   - osx
   - linux
 
+dotnet: 1.0.4
+
 branches:
   only:
     - master
