@@ -12,6 +12,7 @@ var nugetApiKey = Argument("nugetapikey", EnvironmentVariable("NUGET_API_KEY"));
 // GLOBAL VARIABLES
 //////////////////////////////////////////////////////////////////////
 var version = "1.0.0";
+var versionNumber = "1.0.0";
 
 var artifacts = Directory("./artifacts");
 var solution = File("./src/Inject.sln");
@@ -41,17 +42,13 @@ Task("Versioning")
     .WithCriteria(() => !BuildSystem.IsLocalBuild)
     .Does(() => 
 {
-    GitVersion(new GitVersionSettings
+    var result = GitVersion(new GitVersionSettings
     {
         OutputType = GitVersionOutput.BuildServer
     });
 
-    var result = GitVersion(new GitVersionSettings
-    {
-        UpdateAssemblyInfo = false
-    });
-
     version = result.NuGetVersion;
+    versionNumber = result.MajorMinorPatch;
 });
 
 Task("Build")
@@ -66,8 +63,8 @@ Task("Build")
         Configuration = configuration,
         ArgumentCustomization = x => x
             .Append("/p:Version={0}", version)
-            .Append("/p:AssemblyVersion={0}", version)
-            .Append("/p:FileVersion={0}", version)
+            .Append("/p:AssemblyVersion={0}", versionNumber)
+            .Append("/p:FileVersion={0}", versionNumber)
     });
 });
 
