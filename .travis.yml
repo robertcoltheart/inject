@@ -4,6 +4,7 @@ os:
   - osx
   - linux
 
+dist: trusty
 dotnet: 1.0.4
 
 branches:
