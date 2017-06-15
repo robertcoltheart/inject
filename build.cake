@@ -39,13 +39,9 @@ Task("Restore")
 
 Task("Versioning")
     .IsDependentOn("Clean")
-    .WithCriteria(() => !BuildSystem.IsLocalBuild)
     .Does(() => 
 {
-    var result = GitVersion(new GitVersionSettings
-    {
-        OutputType = GitVersionOutput.BuildServer
-    });
+    var result = GitVersion();
 
     version = result.NuGetVersion;
     versionNumber = result.MajorMinorPatch;
