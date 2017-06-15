@@ -6,7 +6,6 @@ os:
 
 dist: trusty
 dotnet: 1.0.4
-mono: none
 
 branches:
   only:
