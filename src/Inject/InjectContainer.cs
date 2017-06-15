@@ -27,7 +27,7 @@ namespace Inject
                 .GetParameters()
                 .Select(x => Resolve(x.ParameterType, activating))
                 .ToArray();
-            
+
             try
             {
                 return Activator.CreateInstance(type, parameters);
@@ -85,7 +85,7 @@ namespace Inject
 
             _instances[type] = instance;
         }
-        
+
         /// <summary>
         /// Resolve a type and return a concrete instance.
         /// </summary>

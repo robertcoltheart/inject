@@ -1,34 +1,33 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using NUnit.Framework;
+using Xunit;
 
 namespace Inject
 {
-    [TestFixture]
     public class ResolutionFailedExceptionTests
     {
-        [Test]
+        [Fact]
         public void IsTypeOfException()
-        {
-            Assert.IsTrue(typeof(Exception).IsAssignableFrom(typeof(ResolutionFailedException)), "Type is not an exception.");
+        { 
+            var exception = new ResolutionFailedException();
+
+            Assert.IsAssignableFrom<Exception>(exception);
         }
 
-        [Test]
+        [Fact]
         public void InnerExceptionSet()
         {
             var innerException = new Exception();
             var exception = new ResolutionFailedException("msg", innerException);
 
-            Assert.AreSame(innerException, exception.InnerException);
+            Assert.Same(innerException, exception.InnerException);
         }
 
-        [Test]
+        [Fact]
         public void HasMessage()
         {
             var exception = new ResolutionFailedException("msg");
 
-            Assert.AreEqual("msg", exception.Message);
+            Assert.Equal("msg", exception.Message);
         }
     }
 }

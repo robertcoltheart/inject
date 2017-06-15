@@ -1,10 +1,11 @@
-#tool "nuget:?package=GitVersion.CommandLine&version=3.6.5"
-#tool "nuget:?package=NUnit.ConsoleRunner&version=3.6.1"
+#tool "GitVersion.CommandLine"
+#tool "NUnit.ConsoleRunner"
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
 var target = Argument("target", "Default");
+var configuration = Argument("configuration", "Release");
 var nugetApiKey = Argument("nugetapikey", EnvironmentVariable("NUGET_API_KEY"));
 
 //////////////////////////////////////////////////////////////////////
@@ -32,7 +33,7 @@ Task("Restore")
     .IsDependentOn("Clean")
     .Does(() => 
 {
-    NuGetRestore(solution);
+    DotNetCoreRestore(solution);
 });
 
 Task("Versioning")
@@ -47,7 +48,7 @@ Task("Versioning")
 
     var result = GitVersion(new GitVersionSettings
     {
-        UpdateAssemblyInfo = true
+        UpdateAssemblyInfo = false
     });
 
     version = result.NuGetVersion;
@@ -60,10 +61,13 @@ Task("Build")
 {
     CreateDirectory(artifacts);
 
-    DotNetBuild(solution, x => 
+    DotNetCoreBuild(solution, new DotNetCoreBuildSettings
     {
-        x.SetConfiguration("Release");
-        x.WithProperty("GenerateDocumentation", "true");
+        Configuration = configuration,
+        ArgumentCustomization = x => x
+            .Append("/p:Version={0}", version)
+            .Append("/p:AssemblyVersion={0}", version)
+            .Append("/p:FileVersion={0}", version)
     });
 });
 
@@ -71,15 +75,12 @@ Task("Test")
     .IsDependentOn("Build")
     .Does(() => 
 {
-    var testResults = artifacts + File("TestResults.xml");
-    
-    NUnit3("./src/**/bin/**/Release/*.Tests.dll", new NUnit3Settings
+    var projects = GetFiles("./src/**/*.Tests.csproj");
+
+    foreach (var project in projects)
     {
-        Results = testResults
-    });
-    
-    if (BuildSystem.IsRunningOnAppVeyor)
-        AppVeyor.UploadTestResults(testResults, AppVeyorTestResultsType.NUnit3);
+        DotNetCoreTest(project.FullPath);
+    }
 });
 
 Task("Package")
@@ -87,12 +88,19 @@ Task("Package")
     .IsDependentOn("Test")
     .Does(() => 
 {
-    NuGetPack("./build/Inject.nuspec", new NuGetPackSettings
+    var projects = GetFiles("./src/**/*.csproj", x => !x.Path.FullPath.EndsWith("Tests"));
+
+    foreach (var project in projects)
     {
-        Version = version,
-        BasePath = "./src",
-        OutputDirectory = artifacts
-    });
+        DotNetCorePack(project.FullPath, new DotNetCorePackSettings
+        {
+            Configuration = configuration,
+            OutputDirectory = artifacts,
+            NoBuild = true,
+            ArgumentCustomization = x => x
+                .Append("/p:Version={0}", version)
+        });
+    }
 });
 
 Task("Publish")

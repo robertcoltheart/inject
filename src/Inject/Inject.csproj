@@ -2,10 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.0</TargetFramework>
+    <Authors>Robert Coltheart</Authors>
+    <Description>A dependency injection container for registering and resolving types.</Description>
+    <Company></Company>
+    <PackageLicenseUrl>https://github.com/robertcoltheart/Inject/raw/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/robertcoltheart/Inject</PackageProjectUrl>
+    <PackageTags>di dependency injection container</PackageTags>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\netstandard1.0\Inject.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
