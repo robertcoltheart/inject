@@ -1,2 +1,12 @@
 next-version: 1.11.0
+mode: ContinuousDelivery
 commit-message-incrementing: Disabled
+branches:
+  master:
+    tag: ''
+  features?[/-]:
+    tag: PullRequest
+  bugs?[/-]:
+    tag: Bug
+  refactor:
+    tag: PullRequest
