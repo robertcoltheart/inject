@@ -6,7 +6,10 @@ branches:
     tag: ''
   features?[/-]:
     tag: PullRequest
+    tag-number-pattern: '[/-](?<number>\d+)[-/]'
   bugs?[/-]:
     tag: Bug
+    tag-number-pattern: '[/-](?<number>\d+)[-/]'
   refactor:
     tag: PullRequest
+    tag-number-pattern: '[/-](?<number>\d+)[-/]'
