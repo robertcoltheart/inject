@@ -41,7 +41,10 @@ Task("Versioning")
     .IsDependentOn("Clean")
     .Does(() => 
 {
-    var result = GitVersion();
+    var result = GitVersion(new GitVersionSettings
+    {
+        OutputType = GitVersionOutput.BuildServer
+    });
 
     version = result.NuGetVersion;
     versionNumber = result.MajorMinorPatch;
