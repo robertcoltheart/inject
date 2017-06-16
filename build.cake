@@ -43,7 +43,7 @@ Task("Versioning")
 {
     var result = GitVersion(new GitVersionSettings
     {
-        OutputType = GitVersionOutput.BuildServer
+        OutputType = GitVersionOutput.Json
     });
 
     version = result.NuGetVersion;
