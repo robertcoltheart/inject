@@ -16,7 +16,9 @@ namespace Inject
 
         private object CreateType(Type type, Stack<Type> activating)
         {
-            ConstructorInfo[] constructors = type.GetConstructors();
+            ConstructorInfo[] constructors = type.GetTypeInfo().DeclaredConstructors
+                .Where(x => x.IsPublic)
+                .ToArray();
 
             if (constructors.Length != 1)
                 throw new ResolutionFailedException(string.Format(Resources.ResolutionFailed_WrongNumberConstructors, type));
@@ -25,7 +27,7 @@ namespace Inject
                 .GetParameters()
                 .Select(x => Resolve(x.ParameterType, activating))
                 .ToArray();
-            
+
             try
             {
                 return Activator.CreateInstance(type, parameters);
@@ -54,7 +56,7 @@ namespace Inject
             if (_registeredTypes.ContainsKey(type))
                 throw new ArgumentException(string.Format(Resources.Argument_TypeAlreadyRegistered, type), nameof(type));
 
-            if (!type.IsAssignableFrom(resolveType))
+            if (!type.GetTypeInfo().IsAssignableFrom(resolveType.GetTypeInfo()))
                 throw new ArgumentException(string.Format(Resources.Argument_TypeShouldInherit, type, type));
 
             _registeredTypes[type] = resolveType;
@@ -83,7 +85,7 @@ namespace Inject
 
             _instances[type] = instance;
         }
-        
+
         /// <summary>
         /// Resolve a type and return a concrete instance.
         /// </summary>
@@ -131,7 +133,7 @@ namespace Inject
             if (activating.Contains(resolveType))
                 throw new ResolutionFailedException(string.Format(Resources.ResolutionFailed_CircularReference, type, string.Join(Environment.NewLine, activating.Select(x => x.ToString()).ToArray())));
 
-            if (resolveType != null && (resolveType.IsInterface || resolveType.IsAbstract))
+            if (resolveType != null && (resolveType.GetTypeInfo().IsInterface || resolveType.GetTypeInfo().IsAbstract))
                 throw new ResolutionFailedException(string.Format(Resources.ResolutionFailed_CannotCreateInterface, resolveType));
         }
     }
