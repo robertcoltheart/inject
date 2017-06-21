@@ -1,15 +1,3 @@
 next-version: 1.11.0
 mode: ContinuousDelivery
 commit-message-incrementing: Disabled
-branches:
-  master:
-    tag: ''
-  features?[/-]:
-    tag: PullRequest
-    tag-number-pattern: '[/-](?<number>\d+)[-/]'
-  bugs?[/-]:
-    tag: Bug
-    tag-number-pattern: '[/-](?<number>\d+)[-/]'
-  refactor:
-    tag: PullRequest
-    tag-number-pattern: '[/-](?<number>\d+)[-/]'
