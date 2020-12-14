@@ -20,7 +20,7 @@ jobs:
       - name: Deploy
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        run: ./build.ps1 publish
+        run: ./build.sh publish
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
