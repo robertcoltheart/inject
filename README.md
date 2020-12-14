@@ -1,4 +1,5 @@
-# Inject [![Travis](https://img.shields.io/travis/robertcoltheart/Inject.svg)](https://travis-ci.org/robertcoltheart/Inject) [![AppVeyor](https://img.shields.io/appveyor/ci/robertcoltheart/Inject.svg)](https://ci.appveyor.com/project/robertcoltheart/Inject) [![NuGet](https://img.shields.io/nuget/v/Inject.svg)](https://www.nuget.org/packages/Inject)
+# Inject 
+[![Build](https://img.shields.io/github/workflow/status/robertcoltheart/Inject/build?style=flat-square)](https://github.com/robertcoltheart/Inject/actions?query=workflow:build) [![NuGet](https://img.shields.io/nuget/v/Inject.svg?style=flat-square)](https://www.nuget.org/packages/Inject)
 A dependency injection container for registering and resolving types.
 
 ## Usage
