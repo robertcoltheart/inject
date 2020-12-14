@@ -1,5 +1,6 @@
 # Inject 
 [![Build](https://img.shields.io/github/workflow/status/robertcoltheart/Inject/build?style=flat-square)](https://github.com/robertcoltheart/Inject/actions?query=workflow:build) [![NuGet](https://img.shields.io/nuget/v/Inject.svg?style=flat-square)](https://www.nuget.org/packages/Inject)
+
 A dependency injection container for registering and resolving types.
 
 ## Usage
