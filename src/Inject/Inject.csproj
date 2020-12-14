@@ -8,7 +8,6 @@
 
     <Authors>Robert Coltheart</Authors>
     <Description>A dependency injection container for registering and resolving types.</Description>
-    <Company></Company>
     <PackageProjectUrl>https://github.com/robertcoltheart/Inject</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>di dependency injection container</PackageTags>
