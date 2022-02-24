@@ -141,7 +141,7 @@ namespace Inject
 
             try
             {
-                return Activator.CreateInstance(type, parameters);
+                return Activator.CreateInstance(type, parameters)!;
             }
             catch (TargetInvocationException ex)
             {
