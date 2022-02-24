@@ -30,6 +30,11 @@ namespace Inject
         /// <exception cref="ArgumentNullException"><paramref name="instance"/> is null.</exception>
         public static void Register<T>(this IInjectContainer container, T instance)
         {
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
             container.Register(typeof(T), instance);
         }
 

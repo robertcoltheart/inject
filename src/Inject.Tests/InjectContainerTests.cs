@@ -10,7 +10,7 @@ namespace Inject
         {
             var container = new InjectContainer();
 
-            var exception = Record.Exception(() => container.Register(null, typeof(object)));
+            var exception = Record.Exception(() => container.Register(null!, typeof(object)));
 
             Assert.IsType<ArgumentNullException>(exception);
         }
@@ -20,7 +20,7 @@ namespace Inject
         {
             var container = new InjectContainer();
 
-            var exception = Record.Exception(() => container.Register(typeof(object), null));
+            var exception = Record.Exception(() => container.Register(typeof(object), null!));
 
             Assert.IsType<ArgumentNullException>(exception);
         }
@@ -30,7 +30,7 @@ namespace Inject
         {
             var container = new InjectContainer();
 
-            var exception = Record.Exception(() => container.Register(null, new object()));
+            var exception = Record.Exception(() => container.Register(null!, new object()));
 
             Assert.IsType<ArgumentNullException>(exception);
         }
@@ -81,7 +81,7 @@ namespace Inject
         {
             var container = new InjectContainer();
 
-            var exception = Record.Exception(() => container.Resolve(null));
+            var exception = Record.Exception(() => container.Resolve(null!));
 
             Assert.IsType<ArgumentNullException>(exception);
         }

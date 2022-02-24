@@ -11,32 +11,9 @@ namespace Inject
     /// </summary>
     public class InjectContainer : IInjectContainer
     {
-        private readonly Dictionary<Type, Type> _registeredTypes = new Dictionary<Type, Type>();
-        private readonly Dictionary<Type, object> _instances = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, Type> registeredTypes = new();
 
-        private object CreateType(Type type, Stack<Type> activating)
-        {
-            ConstructorInfo[] constructors = type.GetTypeInfo().DeclaredConstructors
-                .Where(x => x.IsPublic)
-                .ToArray();
-
-            if (constructors.Length != 1)
-                throw new ResolutionFailedException(string.Format(Resources.ResolutionFailed_WrongNumberConstructors, type));
-
-            object[] parameters = constructors.First()
-                .GetParameters()
-                .Select(x => Resolve(x.ParameterType, activating))
-                .ToArray();
-
-            try
-            {
-                return Activator.CreateInstance(type, parameters);
-            }
-            catch (TargetInvocationException ex)
-            {
-                throw new ResolutionFailedException(string.Format(Resources.ResolutionFailed_CreationError, type), ex.InnerException);
-            }
-        }
+        private readonly Dictionary<Type, object> instances = new();
 
         /// <summary>
         /// Register a type in the container.
@@ -48,18 +25,26 @@ namespace Inject
         public void Register(Type type, Type resolveType)
         {
             if (type == null)
+            {
                 throw new ArgumentNullException(nameof(type));
+            }
 
             if (resolveType == null)
+            {
                 throw new ArgumentNullException(nameof(resolveType));
+            }
 
-            if (_registeredTypes.ContainsKey(type))
+            if (registeredTypes.ContainsKey(type))
+            {
                 throw new ArgumentException(string.Format(Resources.Argument_TypeAlreadyRegistered, type), nameof(type));
+            }
 
             if (!type.GetTypeInfo().IsAssignableFrom(resolveType.GetTypeInfo()))
+            {
                 throw new ArgumentException(string.Format(Resources.Argument_TypeShouldInherit, type, type));
+            }
 
-            _registeredTypes[type] = resolveType;
+            registeredTypes[type] = resolveType;
         }
 
         /// <summary>
@@ -72,18 +57,26 @@ namespace Inject
         public void Register(Type type, object instance)
         {
             if (type == null)
+            {
                 throw new ArgumentNullException(nameof(type));
+            }
 
             if (instance == null)
+            {
                 throw new ArgumentNullException(nameof(instance));
+            }
 
-            if (_instances.ContainsKey(type))
+            if (instances.ContainsKey(type))
+            {
                 throw new ArgumentException(string.Format(Resources.Argument_TypeAlreadyRegistered, type), nameof(type));
+            }
 
             if (!type.IsInstanceOfType(instance))
+            {
                 throw new ArgumentException(string.Format(Resources.Argument_TypeShouldInherit, instance.GetType(), type));
+            }
 
-            _instances[type] = instance;
+            instances[type] = instance;
         }
 
         /// <summary>
@@ -99,42 +92,74 @@ namespace Inject
         public object Resolve(Type type)
         {
             if (type == null)
+            {
                 throw new ArgumentNullException(nameof(type));
+            }
 
             return Resolve(type, new Stack<Type>());
         }
 
         private object Resolve(Type type, Stack<Type> activating)
         {
-            object instance;
-
-            if (_instances.TryGetValue(type, out instance))
+            if (instances.TryGetValue(type, out var instance))
+            {
                 return instance;
+            }
 
-            Type resolveType;
-
-            if (!_registeredTypes.TryGetValue(type, out resolveType))
+            if (!registeredTypes.TryGetValue(type, out var resolveType))
+            {
                 resolveType = type;
+            }
 
             ValidateResolution(type, resolveType, activating);
 
             activating.Push(resolveType);
 
             instance = CreateType(resolveType, activating);
-            _instances[type] = instance;
+            instances[type] = instance;
 
             activating.Pop();
 
             return instance;
         }
 
+        private object CreateType(Type type, Stack<Type> activating)
+        {
+            var constructors = type.GetTypeInfo().DeclaredConstructors
+                .Where(x => x.IsPublic)
+                .ToArray();
+
+            if (constructors.Length != 1)
+            {
+                throw new ResolutionFailedException(string.Format(Resources.ResolutionFailed_WrongNumberConstructors, type));
+            }
+
+            var parameters = constructors.First()
+                .GetParameters()
+                .Select(x => Resolve(x.ParameterType, activating))
+                .ToArray();
+
+            try
+            {
+                return Activator.CreateInstance(type, parameters);
+            }
+            catch (TargetInvocationException ex)
+            {
+                throw new ResolutionFailedException(string.Format(Resources.ResolutionFailed_CreationError, type), ex.InnerException!);
+            }
+        }
+
         private void ValidateResolution(Type type, Type resolveType, Stack<Type> activating)
         {
             if (activating.Contains(resolveType))
+            {
                 throw new ResolutionFailedException(string.Format(Resources.ResolutionFailed_CircularReference, type, string.Join(Environment.NewLine, activating.Select(x => x.ToString()).ToArray())));
+            }
 
-            if (resolveType != null && (resolveType.GetTypeInfo().IsInterface || resolveType.GetTypeInfo().IsAbstract))
+            if (resolveType.GetTypeInfo().IsInterface || resolveType.GetTypeInfo().IsAbstract)
+            {
                 throw new ResolutionFailedException(string.Format(Resources.ResolutionFailed_CannotCreateInterface, resolveType));
+            }
         }
     }
 }
