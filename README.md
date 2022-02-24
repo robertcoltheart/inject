@@ -1,6 +1,6 @@
 # Inject 
 
-[![NuGet](https://img.shields.io/nuget/v/Inject?style=for-the-badge)](https://www.nuget.org/packages/Inject) [![Build](https://img.shields.io/github/workflow/status/robertcoltheart/Inject/build?style=for-the-badge)](https://github.com/robertcoltheart/Inject/actions?query=workflow:build) [![License](https://img.shields.io/github/license/robertcoltheart/Inject?style=for-the-badge)](https://github.com/robertcoltheart/Inject/blob/master/LICENSE)
+[![NuGet](https://img.shields.io/nuget/v/Inject?style=for-the-badge)](https://www.nuget.org/packages/Inject) [![License](https://img.shields.io/github/license/robertcoltheart/Inject?style=for-the-badge)](https://github.com/robertcoltheart/Inject/blob/master/LICENSE)
 
 A dependency injection container for registering and resolving types.
 
@@ -13,7 +13,7 @@ Types and instances can be registered in the container, as in the example below.
 var container = new InjectContainer();
 container.Register<IType, Type>();
 
-IType instance = container.Resolve<IType>();
+var instance = container.Resolve<IType>();
 ```
 
 ## Contributing
